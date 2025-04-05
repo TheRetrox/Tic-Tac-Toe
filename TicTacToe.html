@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+
+        .board .box {
+            width: 100px;
+            height: 100px;
+            border: 1px solid rgb(255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition-duration: 1s;
+            cursor: pointer;
+        }
+
+        .board .box:hover {
+            background-color: aqua;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .board .box span {
+            font-size: 80px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container .b-top-none {
+            border-top: none;
+        }
+
+        .container .b-left-none {
+            border-left: none;
+        }
+
+        .container .b-right-none {
+            border-right: none;
+        }
+
+        .container .b-buttom-none {
+            border-bottom: none;
+        }
+
+        .v-class {
+            display: none;
+        }
+
+        .h-class {
+            display: none;
+        }
+
+        .winner p {
+            color: white;
+            font-size: 50px;
+        }
+
+        .winner #restart {
+            width: 200px;
+            height: 80px;
+            border: none;
+            color: white;
+            font-size: 40px;
+            background-color: aqua;
+            transition-duration: 0.5s;
+        }
+
+        .winner #restart:hover {
+            background-color: rgb(43, 81, 184);
+        }
+
+
+
+        /* responsive */
+        @media(max-width: 330px) {
+            .board .box {
+                width: 50px;
+                height: 50px;
+            }
+
+            .board .box span {
+                font-size: 40px;
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+
+    </nav>
+
+    <main>
+
+        <div class="board">
+
+            <div class="container">
+                <div class="box b-top-none b-left-none"><span class="text"></span></div>
+                <div class="box b-top-none"><span class="text"></span></div>
+                <div class="box b-top-none b-right-none"><span class="text"></span></div>
+            </div>
+
+            <div class="container">
+                <div class="box  b-left-none"><span class="text"></span></div>
+                <div class="box"><span class="text"></span></div>
+                <div class="box  b-right-none"><span class="text"></span></div>
+            </div>
+
+            <div class="container">
+                <div class="box b-buttom-none b-left-none"><span class="text"></span></div>
+                <div class="box b-buttom-none"><span class="text"></span></div>
+                <div class="box b-buttom-none b-right-none"><span class="text"></span></div>
+            </div>
+
+        </div>
+
+        <div class="winner h-class">
+
+            <p id="winner-text"></p>
+            <button id="restart">Restart</button>
+
+        </div>
+
+    </main>
+
+    <script>
+
+        console.log("tic tac")
+
+
+        let turn = 'X'
+
+        // change turn
+
+
+        const changeTurn = () => {
+            if (turn === 'O') {
+                return turn = 'X'
+            }
+            if (turn === 'X') {
+                return turn = 'O'
+            }
+        }
+
+        //win?
+
+        const win = () => {
+            let text = document.getElementsByClassName('text')
+            let winner_text = document.getElementById('winner-text')
+            let a = document.querySelector('.board')
+            let b = document.querySelector('.winner')
+
+            let win = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ]
+            win.forEach(e => {
+                if ((text[e[0]].innerText === text[e[1]].innerText) && (text[e[2]].innerText === text[e[1]].innerText) && (text[e[0]].innerText !== '')) {
+                    turn = changeTurn()
+                    a.classList.toggle('v-class')
+                    b.classList.toggle('h-class')
+                    winner_text.innerText = turn + " Win"
+                }
+            })
+        }
+
+        //game logic
+
+        let boxes = document.getElementsByClassName("box")
+
+        Array.from(boxes).forEach(element => {
+            let text = element.querySelector('.text')
+            element.addEventListener('click', () => {
+                if (text.innerText === '') {
+                    text.innerText = turn
+                    turn = changeTurn()
+                    win()
+                }
+            })
+        })
+
+        restart.addEventListener('click', () => {
+
+            let text = document.querySelectorAll('.text')
+            Array.from(text).forEach(element => {
+                element.innerText = ''
+            })
+            let a = document.querySelector('.board')
+            let b = document.querySelector('.winner')
+            a.classList.toggle('v-class')
+            b.classList.toggle('h-class')
+        })
+
+
+    </script>
+
+</body>
+
+</html>
